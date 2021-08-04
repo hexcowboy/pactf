@@ -1,0 +1,53 @@
+{
+    "builders": [
+        {
+            "cpus": "1",
+            "memory": "1024",
+            "disk_size": "8000",
+            "hard_drive_interface": "sata",
+            "type": "virtualbox-iso",
+            "vm_name": "{{ user `name` }}",
+            "format": "ova",
+            "guest_os_type": "Ubuntu_64",
+            "output_directory": "{{template_dir}}/../builds",
+            "guest_additions_mode": "disable",
+            "boot_wait": "5s",
+            "boot_command": [
+                "<enter><enter><f6><esc><wait> ",
+                "autoinstall ds=nocloud-net;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/",
+                "<enter>"
+            ],
+            "shutdown_command": "echo 'cowboy' | sudo -S shutdown -P now",
+            "http_directory": "{{template_dir}}/http",
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "iso_url": "{{user `mirror`}}/{{user `mirror_directory`}}/{{user `iso_name`}}",
+            "ssh_username": "root",
+            "ssh_password": "cowboy",
+            "ssh_port": 22,
+            "ssh_timeout": "60m"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "file",
+            "source": "{{template_dir}}/../skel/",
+            "destination": "/"
+        },
+        {
+            "type": "shell",
+            "expect_disconnect": true,
+            "scripts": [
+                "{{template_dir}}/scripts/base.sh",
+                "{{template_dir}}/scripts/build.sh",
+                "{{template_dir}}/scripts/network.sh"
+            ]
+        }
+    ],
+    "variables": {
+        "name": "SET YOUR MACHINE NAME HERE",
+        "iso_checksum": "d1f2bf834bbe9bb43faf16f9be992a6f3935e65be0edece1dee2aa6eb1767423",
+        "iso_name": "ubuntu-20.04.2-live-server-amd64.iso",
+        "mirror": "http://releases.ubuntu.com",
+        "mirror_directory": "20.04"
+    }
+}

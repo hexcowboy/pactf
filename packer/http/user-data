@@ -1,0 +1,12 @@
+#cloud-config
+autoinstall:
+  version: 1
+  ssh:
+    install-server: true
+  early-commands:
+    - systemctl stop ssh
+  user-data:
+    disable_root: false
+  late-commands:
+    - sed -i 's|^root:.:|root:$6$.cowboy.$zXIfabrrq0Gzup71904tAldmegyLLNG9HNBAFHn/ULBKxbo043v.5SQZeHvSHOy69BgvecKIkpvVckKDw4hzW.:|' /target/etc/shadow
+    - sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /target/etc/ssh/sshd_config
