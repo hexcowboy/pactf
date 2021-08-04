@@ -1,5 +1,6 @@
-# PaCTF
+# pactf
 
+> Packer CTF
 > Author: hexcowboy ([@hexcowboy](https://twitter.com/hexcowboy))
 
 This repository will automate the build of an entire Ubuntu 20.04 VirtualBox machine that you can submit to your favorite Capture the Flag provider.
